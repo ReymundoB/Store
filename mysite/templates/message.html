@@ -1,0 +1,9 @@
+  {% if messages %}
+        {% for message in messages %}
+            <div class="alert {% if message.tags == 'success' %} alert-success alert-dismissible fade show {% else %} alert alert-danger alert-dismissible fade show {% endif %}">
+               <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+              {{message}}
+            </div>
+
+        {% endfor %}
+     {% endif %}
