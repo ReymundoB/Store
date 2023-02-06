@@ -33,6 +33,7 @@ urlpatterns = [
     path('productos/', include('products.urls')),# le indicamos adjango que podemos hacer uso de todas las rutas de
     #nuestro producto mediante el prefijo product = productos/:id
     path('carrito/', include('carts.urls')),
+    path('orden/', include('orders.urls')),
 
 ]
 
