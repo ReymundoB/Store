@@ -10,7 +10,12 @@ class User(AbstractUser):
 #se configuró la constante AUTH_USER_MODEL en settings
     def get_full_name(self):
         return  '{} {} '.format(self.firts_name, self.last_name)
+    @property
+    def shipping_address(self):
+        return self.shippingaddress_set.filter(default=True).first()
 
+    def has_shipping_address(self):
+        return self.shipping_address is not None
 
 
 # 1. esto hace que el nuevo modelo no genere la nueva tabla

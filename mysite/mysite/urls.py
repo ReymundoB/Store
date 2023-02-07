@@ -34,6 +34,7 @@ urlpatterns = [
     #nuestro producto mediante el prefijo product = productos/:id
     path('carrito/', include('carts.urls')),
     path('orden/', include('orders.urls')),
+    path('direcciones/', include('shipping_addresses.urls')),
 
 ]
 
