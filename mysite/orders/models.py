@@ -4,9 +4,13 @@ from django.db import models
 from users.models import User
 from carts.models import Cart
 
+
 from enum import Enum
 
 from django.db.models.signals import pre_save
+
+from shipping_addresses.models import ShippingAddress
+
 
 class OrderStatus(Enum):
     CREATED ='CREATED'
@@ -26,9 +30,24 @@ class Order(models.Model):
     shipping_total = models.DecimalField(default=5,max_digits=8, decimal_places=2)
     total = models.DecimalField(default=0,max_digits=8, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
+    shipping_address = models.ForeignKey(ShippingAddress,null=True,blank=True,on_delete=models.CASCADE)
 
     def __str__(self):
         return self.order_id
+
+    def get_ot_set_shipping_address(self):
+        if self.shipping_address: # obtenemos la direccion de envio que tiene la orden
+            return self.shipping_address
+        shipping_address = self.user.shipping_address #Buscamos traes la del usuario
+        if shipping_address: #actualizamos la orden con es direccion
+           self.update_shipping_address(shipping_address)
+        return shipping_address
+
+    def update_shipping_address(self, shipping_address ):
+        self.shipping_address = shipping_address
+        self.save()
+
+
     def update_total(self):
         self.total = self.get_total()
         self.save()

@@ -23,6 +23,9 @@ class ShippingAddress(models.Model):
     def address(self):
         return '{} - {} - {}'.format(self.line1, self.line2, self.city)
 
+    def has_orders(self):
+        return self.order_set.count() >= 1
+
     def update_default(self,default=False):
         self.default = default
         self.save()

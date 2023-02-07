@@ -3,6 +3,8 @@ from django.shortcuts import redirect
 from django.shortcuts import reverse
 from django.shortcuts import get_object_or_404
 
+from django.http import HttpResponseRedirect
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin #para evitar el acceso a un usuario no autenticado
@@ -15,6 +17,9 @@ from .models import ShippingAddress
 from .forms import ShippingAddressForm
 
 from django.views.generic import ListView, UpdateView, DeleteView
+
+from carts.utils import get_or_create_cart
+from orders.utils import get_or_create_order
 
 
 class ShippingAddresListView(LoginRequiredMixin,ListView):#caso especial por ser vista basada en una clase
@@ -54,6 +59,9 @@ class ShippingAddressDeleteView(LoginRequiredMixin,SuccessMessageMixin,DeleteVie
         if self.get_object().user.id!= self.request.user.id:#solo el ususario dueñoa de esa direccion puede eliminarla
             return redirect('carts:cart')
 
+        if self.get_object().has_orders():#no puedes eliminar una direccion si esta relaciona con 1 orden
+            return  redirect('shipping_addresses:shipping_addresses')
+
         return super(ShippingAddressDeleteView, self).dispatch(request, *args, **kwargs)
 
 @login_required(login_url='login')#para usuarios autenticados
@@ -66,6 +74,15 @@ def create(request):
         #shipping_address.default = not ShippingAddress.objects.filter(user=request.user).exists()#si es la 1, la hace default
         shipping_address.default = not request.user.has_shipping_address()
         shipping_address.save()
+
+        if request.GET.get('next'):
+            if request.GET['next'] == reverse('orders:address'):
+                cart = get_or_create_cart(request)
+                order = get_or_create_order(cart,request)
+                order.update_shipping_address(shipping_address)
+
+                return HttpResponseRedirect(request.GET['next'])
+
 
         messages.success(request, 'Se ha creado la dirección de envío')
         return redirect('shipping_addresses:shipping_addresses')
