@@ -9,8 +9,8 @@ Funciones:
 +Seccion de productos (Hecho)
 +Modelo de usuarios (Hecho)
 +Carrito de compras (Hecho)
-+Orden de compra (En desarrollo)
-+Pedidos (Pendiente)
++Orden de compra (Hecho)
++Pedidos (En desarrollo)
 +Código de promoción (Pendiente)
 +Métodos de pago (Pendiente)
 
