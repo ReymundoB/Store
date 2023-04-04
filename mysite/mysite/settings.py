@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 import os
 from pathlib import Path
-
+from decouple import config
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -123,6 +123,12 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
+
+EMAIL_HOST='smtp.googlemail.com'
+EMAIL_PORT=587
+EMAIL_HOST_USER='mreyfact@gmail.com'
+EMAIL_HOST_PASSWORD=config('USER_HOST_PASS')
+EMAIL_USE_TLS=True
 
 
 # Static files (CSS, JavaScript, Images)

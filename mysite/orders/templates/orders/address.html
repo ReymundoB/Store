@@ -11,11 +11,17 @@
       </div>
     <div class="">
       {% include 'shipping_addresses/snippets/shipping_address.html' %}
+
+      <div class="mt-2">
+        <a href="{% url 'orders:confirm' %}" class="btn btn-warning">Entregar a esta dirección</a>
+      </div>
+
       {% if can_choose_address %}
         <div class="mt-2">
           <a href="{% url 'orders:select_address' %}">Otra dirección</a>
         </div>
       {% endif %}
+
 
     </div>
     {% else %}
